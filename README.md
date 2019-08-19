@@ -18,14 +18,14 @@ You need the install the following software on your machine:
 Cloning the tutorial
 -----------------------
 ```shell
-git clone https://github.com/arbabnazar/ansible-training.git
-cd ansible-training
+git clone https://gitlab.com/mastour-anas/ansible101.git
+cd ansible101
 ```
 This training already contains a `Vagrantfile` to get you up and running. Note that you do not need to download any "box" manually. Just run this command and it will get everything for you that you need to perform this training.
 ```shell
 vagrant up
 ```
-It will bring up the **control** machine (Ubuntu 14.04 LTS) and perform the following actions on it:
+It will bring up the **control** machine (Ubuntu 18.04 LTS) and perform the following actions on it:
 - Add the latest  Ansible repository
 - Add the insecure RSA key that will be used for client machines
 - Add some additional SSH config
@@ -34,14 +34,18 @@ Once your machine is up and running, login to the control machine using the foll
 ```
 vagrant ssh
 ```
-There are two other machines, which will be used as clients for practice, on which we'll perform the  configuration using ansible from *control* machine, given them the named 
-- web
+There are four other machines, which will be used as clients for practice, on which we'll perform the  configuration using ansible from *control* machine, given them the named 
+- web1
+- web2
 - database
+- loadbalancing
 
 To start these machines, use the following commands:
 ```
-vagrant up web
+vagrant up web1
+vagrant up web2
 vagrant up database
+vagrant up loadbalancing
 ```
 If something will go wrong, please refer to the Vagrant's [Getting Started Guide](http://docs.vagrantup.com/v2/getting-started/index.html).
 
