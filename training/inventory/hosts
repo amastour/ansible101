@@ -1,0 +1,17 @@
+# Inventory file 
+
+
+[apache]
+web1 ansible_ssh=192.168.33.100
+web2 ansible_ssh=192.168.33.101
+
+[mysql]
+database
+#db02
+
+[linux:children]
+apache
+mysql
+
+
+

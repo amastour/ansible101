@@ -1,0 +1,36 @@
+---
+mysql_user_home: /home/vagrant
+mysql_user_name: vagrant
+mysql_user_password: $ANSIBLE_VAULT;1.1;AES256
+          34343538386432313666343733633736623739623365613137353663346533656266323566343263
+          6637613934353561613939636365393031653030653962300a393532346132666333393837633536
+          30316661336366303731383739616266626361666231616362386232313639396638386631643932
+          6265393638333530640a306233373332376635646536393239303135373733376133303263613131
+          6236
+
+mysql_bind_address: 192.168.33.200
+#mysql_server_id: "1"
+#mysql_replication_role: "master"
+#mysql_replication_user:
+#        name: "replica"
+#        host: 192.168.186.51
+#        password: "{{ mysql_user_password }}"
+#        priv: "*.*:REPLICATION SLAVE"
+#mysql_replication_master: 192.168.186.50
+
+mysql_users: 
+        - name: "mediawiki"
+          host: 192.168.33.100
+          password: "mediawiki"
+          priv: "*.*:ALL"
+        - name: "mediawiki"
+          host: 192.168.33.101
+          password: "mediawiki"
+          priv: "*.*:ALL"
+
+
+mysql_databases:
+  - name: "mediawiki"
+    encoding: utf8
+    collation: utf8_general_ci
+

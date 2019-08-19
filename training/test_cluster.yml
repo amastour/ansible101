@@ -1,0 +1,6 @@
+---
+
+- name: test cluster mysql
+  hosts: mysql
+  roles: 
+        - ansible-role-mysql

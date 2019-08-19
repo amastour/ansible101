@@ -1,0 +1,12 @@
+---
+
+apache_vhosts:
+        - servername: "{{ ansible_hostname }}"
+          documentroot: /var/www/html/mediawiki
+          options: +FollowSymlinks
+          allow_override: ALL
+          extra_parameters:
+            - ErrorLog ${APACHE_LOG_DIR}/error.log
+            - CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+apache_remove_default_vhost: true
