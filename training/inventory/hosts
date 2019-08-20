@@ -9,6 +9,9 @@ web2 ansible_ssh=192.168.33.101
 database
 #db02
 
+[web]
+loadbalancing
+
 [linux:children]
 apache
 mysql

@@ -8,6 +8,7 @@ ff02::1 ip6-allnodes
 ff02::2 ip6-allrouters
 ff02::3 ip6-allhosts
 
+192.168.33.50   control
 
 192.168.33.100  web1
 192.168.33.101  web2
