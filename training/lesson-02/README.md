@@ -9,8 +9,13 @@ ansible --version
 ```
 ```shell
 vagrant@Control:~/ansible$ ansible --version
-ansible 1.9.4
-  configured module search path = None
+ [WARNING] Ansible is being run in a world writable directory (/home/vagrant/ansible), ignoring it as an ansible.cfg source. For more information see https://docs.ansible.com/ansible/devel/reference_appendices/config.html#cfg-in-world-writable-dir
+ansible 2.8.4
+  config file = /etc/ansible/ansible.cfg
+  configured module search path = [u'/home/vagrant/.ansible/plugins/modules', u'/usr/share/ansible/plugins/modules']
+  ansible python module location = /usr/lib/python2.7/dist-packages/ansible
+  executable location = /usr/bin/ansible
+  python version = 2.7.15+ (default, Nov 27 2018, 23:36:35) [GCC 7.3.0]
 vagrant@Control:~/ansible$
 ```
 Now come to the Ansible Ad-hoc commands, In simple words, ad-hoc commands are those commands which you want to execute directly without writing a playbook.
@@ -21,18 +26,28 @@ ansible -m ping all
 ```
 `ping` module always returns `pong` on successful contact.
 ```json
-vagrant@Control:~/ansible$ ansible -m ping all
-db.example.com | success >> {
+vagrant@Control:~/ansible$ ansible -i training/inventory/hosts -m ping all
+database | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
     "changed": false,
     "ping": "pong"
 }
-
-web.example.com | success >> {
+web1 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
     "changed": false,
     "ping": "pong"
 }
-
-vagrant@Control:~/ansible$
+web2 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
+    "changed": false,
+    "ping": "pong"
+}
 ```
 **Example-2#** Change the remote **hostname** using the `command` module:
 ```
@@ -40,22 +55,26 @@ ansible -m command -a "hostname" all
 ```
 And response we get from server will be:
 ```json
-vagrant@Control:~/ansible$ ansible -m command -a "hostname" all
-web.example.com | success | rc=0 >>
-web
+vagrant@Control:~/ansible$ ansible -i training/inventory/hosts -m command -a "hostname" all
 
-db.example.com | success | rc=0 >>
+database | CHANGED | rc=0 >>
 database
+
+web2 | CHANGED | rc=0 >>
+web2
+
+web1 | CHANGED | rc=0 >>
+web1
 
 vagrant@Control:~/ansible$
 ```
 **Example-3#** Make a directory on remote servers:
 ```
-ansible web -m file -a "dest=/tmp/test state=directory"
+ansible -i training/inventory/hosts apache -m file -a "dest=/tmp/test state=directory"
 ```
 The output of the above command will be like this:
 ```json
-vagrant@Control:~/ansible$ ansible web -m file -a "dest=/tmp/test state=directory"
+vagrant@Control:~/ansible$ ansible -i training/inventory/hosts apache -m file -a "dest=/tmp/test state=directory"
 web.example.com | success >> {
     "changed": true,
     "gid": 1000,

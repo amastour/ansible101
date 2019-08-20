@@ -2,14 +2,14 @@
 - hosts: web
   become: yes
   vars:
-    - nginx_version: nginx=1.4.6-1ubuntu3.3
+    - nginx_version: nginx=1.14.0-0ubuntu1.5
     - success_message: "Nginx version {{ nginx_version }} installed successfully"
   tasks:
     - name: Install the Nginx HTTP Server
       apt: 
         name: "{{ nginx_version }}"
         update_cache: yes 
-        state: installed
+        state: present
 
     - debug:
         msg: "{{ success_message }}"

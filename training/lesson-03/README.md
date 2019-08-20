@@ -15,7 +15,7 @@ Lets start to build the playbook which will install the **nginx** HTTP server on
       apt: 
         name: nginx
         update_cache: yes 
-        state: installed
+        state: present
 ```
  Here is the explainaiton of this playbook:
 
@@ -27,35 +27,38 @@ We just have one task that use the [apt](http://docs.ansible.com/ansible/apt_mod
 
 If we want to see the list of the hosts on which this playbook will make change, then we can use the `--list-hosts` command:
 ```shell
-vagrant@Control:~/ansible$ ansible-playbook training/lesson-03/lesson-03.yml --list-hosts
+vagrant@Control:~/ansible$ ansible-playbook  -i training/inventory/hosts training/lesson-03/lesson-03.yml --list-hosts
+ [WARNING] Ansible is being run in a world writable directory (/home/vagrant/ansible), ignoring it as an ansible.cfg source. For more information see https://docs.ansible.com/ansible/devel/reference_appendices/config.html#cfg-in-world-writable-dir
 
 playbook: training/lesson-03/lesson-03.yml
 
-  play #1 (web): host count=1
-    web.example.com
+  play #1 (web): web    TAGS: []
+    pattern: [u'web']
+    hosts (1):
+      loadbalancing
 
 vagrant@Control:~/ansible$
 ```
 Now it's time to execute this playbooks and for this we will be using `ansible-playbook`:
 ```shell
-ansible-playbook lesson-03.yml
+ansible-playbook -i training/inventory/hosts lesson-03.yml
 ```
 Output will give you the details of each task whether succeeded, failed or has been made any-change. Here is how the console output should look like:
 ```shell
-vagrant@Control:~/ansible/playbooks$ ansible-playbook training/lesson-03/lesson-03.yml
+vagrant@Control:~/ansible$ ansible-playbook  -i training/inventory/hosts training/lesson-03/lesson-03.yml
 
-PLAY [web] ********************************************************************
+PLAY [web] *************************************************************************************************************
 
-GATHERING FACTS ***************************************************************
-ok: [web.example.com]
+TASK [Gathering Facts] *************************************************************************************************
+ok: [loadbalancing]
 
-TASK: [Install the Nginx HTTP Server] *****************************************
-changed: [web.example.com]
+TASK [Install the Nginx HTTP Server] ***********************************************************************************
+changed: [loadbalancing]
 
-PLAY RECAP ********************************************************************
-web.example.com            : ok=2    changed=1    unreachable=0    failed=0
+PLAY RECAP *************************************************************************************************************
+loadbalancing              : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 
-vagrant@Control:~/ansible/playbooks$
+vagrant@Control:~/ansible$
 ```
 Let's talk about the each line of the output.
 ```shell
@@ -64,31 +67,33 @@ PLAY [web] ********************************************************************
 Ansible let us know that it is running the play on hosts `web`.
 ```shell
 GATHERING FACTS ***************************************************************
-ok: [web.example.com]
+ok: [loadbalancing]
 ```
 Beginning of each play, Ansible run `setup` module on remote hosts to gather facts, if we don't want to gather the fact then we can just change `gather_facts: no`.
 ```shell
 TASK: [Install the Nginx HTTP Server] *****************************************
-changed: [web.example.com]
+changed: [loadbalancing]
 ```
-Next, our only task ran on the host `web.example.com` and report that it has changed something on the host (it this case, it has installed Nginx).
+Next, our only task ran on the host `loadbalancing` and report that it has changed something on the host (it this case, it has installed Nginx).
 
 At the end, Ansible gives the summary of what happened: two tasks have been run, one of them has made change on the target host (Install Nginx) and setup module doesn't make any change.
 
 Let's try to run this playbook once again:
 ```shell
-vagrant@Control:~/ansible/playbooks$ ansible-playbook training/lesson-03/lesson-03.yml
+vagrant@Control:~/ansible$ ansible-playbook  -i training/inventory/hosts training/lesson-03/lesson-03.yml
 
-PLAY [web] ********************************************************************
+PLAY [web] *************************************************************************************************************
 
-GATHERING FACTS ***************************************************************
-ok: [web.example.com]
+TASK [Gathering Facts] *************************************************************************************************
+ok: [loadbalancing]
 
-TASK: [Install the Nginx HTTP Server] *****************************************
-ok: [web.example.com]
+TASK [Install the Nginx HTTP Server] ***********************************************************************************
+ok: [loadbalancing]
 
-PLAY RECAP ********************************************************************
-web.example.com            : ok=2    changed=0    unreachable=0    failed=0
+PLAY RECAP *************************************************************************************************************
+loadbalancing              : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+vagrant@Control:~/ansible$
 ```
 Changed is `0` now because tasks that were successful run before **will-not** make any change on the host again, meaning they will make only change when that are required to bring the target host into the desired state. This concept is called idempotent, meaning change commands are not run unless needed. In other words, on each execution of this playbook, system will not install the Nginx.
 

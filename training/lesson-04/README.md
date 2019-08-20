@@ -1,6 +1,6 @@
-#Ansible Variables
+# Ansible Variables
 We use variables in ansible to deal with the situation where things differ between systems. Variables are really simply in ansible and
-declare as key value pair, for example, `name: tendo`, where `name` is a key and `tendo` is it's value.
+declare as key value pair, for example, `name: foo`, where `name` is a key and `foo` is it's value.
 
 Let's take our previous playbook that we have used to install Nginx, this time, we'll modify it to install the exact version of Nginx instead of default version that Ubuntu will automatically install.
 It's really easy to use the variable inside ansible task, just enclose the variable name inside `"{{ double curly braces }}"`
@@ -9,13 +9,13 @@ It's really easy to use the variable inside ansible task, just enclose the varia
 - hosts: web
   become: yes
   vars:
-    - nginx_version: nginx=1.4.6-1ubuntu3.3
+    - nginx_version: nginx=1.14.0-0ubuntu1.5
   tasks:
     - name: Install the Nginx HTTP Server
       apt: 
         name: "{{ nginx_version }}"
         update_cache: yes 
-        state: installed
+        state: present
 ```
  We can also use the value of the variable as variable, for example, after successfully installation of Nginx, we want to print the success message with the provided Nginx version.
 ```yaml
@@ -23,14 +23,14 @@ It's really easy to use the variable inside ansible task, just enclose the varia
 - hosts: web
   become: yes
   vars:
-    - nginx_version: nginx=1.4.6-1ubuntu3.3
+    - nginx_version: nginx=1.14.0-0ubuntu1.5
     - success_message: "Nginx version {{ nginx_version }} installed successfully"
   tasks:
     - name: Install the Nginx HTTP Server
       apt: 
         name: "{{ nginx_version }}"
         update_cache: yes 
-        state: installed
+        state: present
 
     - debug:
         msg: "{{ success_message }}"
@@ -49,7 +49,7 @@ changed: [web.example.com]
 
 TASK: [debug ] ****************************************************************
 ok: [web.example.com] => {
-    "msg": "Nginx version nginx=1.4.6-1ubuntu3.3 installed successfully"
+    "msg": "Nginx version nginx=1.14.0-0ubuntu1.5 installed successfully"
 }
 
 PLAY RECAP ********************************************************************
@@ -59,11 +59,9 @@ vagrant@Control:~/ansible$
 ```
 Let's verify that the provided version of Nginx is installed on the target server(web.example.com):
 ```shell
-vagrant@web:~$ nginx -V
-nginx version: nginx/1.4.6 (Ubuntu)
-built by gcc 4.8.4 (Ubuntu 4.8.4-2ubuntu1~14.04)
-TLS SNI support enabled
-vagrant@web:~$
+vagrant@loadbalancing:~$ nginx -v
+nginx version: nginx/1.14.0 (Ubuntu)
+vagrant@loadbalancing:~$
 ```
 ###Variable Types in Ansible:
 

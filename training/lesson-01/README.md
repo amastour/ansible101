@@ -2,22 +2,25 @@ Ansible Inventory File:
 --------------------------
 Ansible can work with multiple systems that you have in your infrastructure by using an INI format file, which is called Inventory file in ansible. During installation, it creates an example that you can use for your reference which is located at `/etc/ansible/hosts`.
 
-We can create our own inventory file from scratch like we did [this](https://github.com/arbabnazar/ansible-training/blob/master/hosts). The format of the file is really simple; things in brackets are called group names.
+We can create our own inventory file from scratch like we did [this](https://gitlab.com/mastour-anas/ansible101/blob/master/training/inventory/hosts). The format of the file is really simple; things in brackets are called group names.
 ```ini
-[web]
-web.example.com
+[apache]
+web1
+web2
 
-[database]
-db.example.com
+[mysql]
+database
 ```
-If `web.example.com` and `db.example.com` are resolvable through DNS, then we are good otherwise we need to add the ip address explicitly for each host.
+If `web1` `web2` and `database` are resolvable through DNS, then we are good otherwise we need to add the ip address explicitly for each host.
 ```ini
-[web]
-web.example.com ansible_ssh_host=192.168.33.100
+[apache]
+web1 ansible_host=192.168.33.100
+web2 ansible_host=192.168.33.101
 
-[database]
-db.example.com ansible_ssh_host=192.168.33.200
+[mysql]
+db ansible_host=192.168.33.200
 ```
 For detail explainiation please check the official [link](http://docs.ansible.com/ansible/intro_inventory.html).
 
 Thanks
+
