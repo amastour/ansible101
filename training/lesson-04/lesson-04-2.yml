@@ -1,0 +1,14 @@
+---
+- hosts: web
+  become: yes
+  vars_files:
+    - vars.yml
+  tasks:
+    - name: Install the Nginx HTTP Server
+      apt: 
+        name: "{{ nginx_version }}"
+        update_cache: yes 
+        state: present
+
+    - debug:
+        msg: "{{ success_message }}"
