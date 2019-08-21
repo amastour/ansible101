@@ -63,6 +63,26 @@ vagrant@loadbalancing:~$ nginx -v
 nginx version: nginx/1.14.0 (Ubuntu)
 vagrant@loadbalancing:~$
 ```
+we can also  define playbook variables in external files. In this case, instead of using `vars`,
+the `vars_files` directive may be used, followed by a list of external variable files relative to the
+playbook that should be read:
+
+```yaml
+---
+- hosts: web
+  become: yes
+  vars_files:
+    - vars.yml
+  tasks:
+    - name: Install the Nginx HTTP Server
+      apt: 
+        name: "{{ nginx_version }}"
+        update_cache: yes 
+        state: present
+
+    - debug:
+        msg: "{{ success_message }}"
+```
 ###Variable Types in Ansible:
 
 There are 4 sources of variables in Ansible:
@@ -73,17 +93,30 @@ ansible -m setup hostname
 ```
 2 - Built-in (pre-defined) Ansible variables (AKA 'magic' variables). They are documented in [Ansible documentation](http://docs.ansible.com/playbooks_variables.html#magic-variables-and-how-to-access-information-about-other-hosts): 
 
-Here is the list extracted from Ansible 1.9 documentation:
+Here is the list extracted from Ansible 1.8 documentation:
 
- - group_names 
- - groups 
- - inventory_hostname 
- - ansible_hostname
- - inventory_hostname_short 
- - play_hosts 
- - delegate_to 
- - inventory_dir
- - inventory_file
+- command line values (eg “-u user”)
+- role defaults
+- inventory file or script group vars
+- inventory group_vars/all
+- playbook group_vars/all
+- inventory group_vars/*
+- playbook group_vars/*
+- inventory file or script host vars
+- inventory host_vars/*
+- playbook host_vars/*
+- host facts / cached set_facts
+- play vars
+- play vars_prompt
+- play vars_files
+- role vars (defined in role/vars/main.yml)
+- block vars (only for tasks in block)
+- task vars (only for the task)
+- include_vars
+- set_facts / registered vars
+- role (and include_role) params
+- include params
+- extra vars (always win precedence)
 
 3 - Variables passed to ansible via command line called extra-variables. 
 4 - Set the variables to the Playbook/Inventory/roles/using included files,but obviously you know what they are.
