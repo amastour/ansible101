@@ -1,0 +1,27 @@
+---
+# handlers file for ansible.nginx
+- name: restart nginx
+  debug: msg="checking config first"
+  changed_when: True
+  notify:
+    - check nginx configuration
+    - restart nginx - after config check
+
+- name: reload nginx
+  debug: msg="checking config first"
+  changed_when: True
+  notify:
+    - check nginx configuration
+    - reload nginx - after config check
+
+- name: check nginx configuration
+  command: "{{ nginx_binary_name }} -t"
+  register: result
+  changed_when: "result.rc != 0"
+  check_mode: no
+
+- name: restart nginx - after config check
+  service: name={{ nginx_service_name }} state=restarted
+
+- name: reload nginx - after config check
+  service: name={{ nginx_service_name }} state=reloaded

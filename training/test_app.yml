@@ -1,0 +1,7 @@
+---
+
+- name: test apache
+  hosts: web
+  roles:
+            - ansible.mediawiki
+            - ansible.apache

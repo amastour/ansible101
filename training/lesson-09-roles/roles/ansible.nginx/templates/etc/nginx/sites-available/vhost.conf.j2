@@ -1,0 +1,48 @@
+{% if nginx_vhost.load_balancing %}
+ 
+ upstream {{ nginx_vhost.upstream_name }} {
+    {% for server in  nginx_vhost.upstream_servers %}
+    server {{ server }};
+    {% endfor %}
+  }
+{% endif %}
+ 
+  root {{ __sites_dir }};
+
+  server {
+    listen          {{ nginx_vhost.port_listen | default('80') }};
+    server_name     {{ nginx_vhost.server_name }};
+
+
+    {% if  nginx_vhost.ssl %}
+    # SSL
+    ssl on;
+    ssl_certificate         {{  nginx_vhost.ssl_certificate }};
+    ssl_certificate_key     {{  nginx_vhost.ssl_certificate_key }};
+    {% endif %}
+
+    {% if  nginx_vhost.access_log is defined %}
+    access_log      {{  nginx_vhost.access_log }};
+    {% endif %}
+
+    {% if  nginx_vhost.error_log is defined %}
+    error_log       {{  nginx_vhost.error_log }};
+    {% endif %}
+
+    {% for extra in  nginx_vhost.server_extra %}
+
+      {% for key, value in  nginx_vhost.extra.items() %}
+        {{ key }}       {{ value }};
+      {% endfor %}
+    {% endfor %}
+    
+    {% for location in  nginx_vhost.locations %}
+    location {{ location.path }} {
+    {% for param in location.params %}
+      {% for key, value in param.items() %}
+      {{ key }}      {{ value }};
+      {% endfor %}
+    {% endfor %}
+    }
+    {% endfor %}
+  }

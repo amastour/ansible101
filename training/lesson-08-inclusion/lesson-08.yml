@@ -1,0 +1,32 @@
+---
+- hosts: front
+  become: yes
+  tasks:
+        - name: include vars for Debian dists
+          include_vars: vars_debian.yml
+          when: ansible_os_family == "Debian"
+        
+        - name: include vars for RedHat dists
+          include_vars: vars_redhat.yml   
+          when: ansible_os_family == "RedHat"
+
+        - name: call Install  Nginx for Debian dists
+          include_tasks: install_debian.yml
+          when: ansible_os_family == "Debian"
+        
+        - name: call Install  Nginx for RedHat dists
+          include_tasks: install_redhat.yml   
+          when: ansible_os_family == "RedHat"
+        
+        - name: call configure  Nginx for Debian dists
+          include_tasks: configure_debian.yml
+          when: ansible_os_family == "Debian"
+        
+        - name: call configure  Nginx for RedHat dists
+          include_tasks: configure_redhat.yml
+          when: ansible_os_family == "RedHat"
+        
+        - debug:
+                msg: "{{ success_message }}"
+        
+

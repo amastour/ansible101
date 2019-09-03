@@ -1,0 +1,52 @@
+---
+# defaults file for ansible.nginx
+
+nginx_binary_name: "nginx"
+nginx_service_name: "{{nginx_binary_name}}"
+nginx_pkgs: "nginx"
+
+
+################### NGINX ENABLED SITES ##############
+nginx_remove_default_vhost: false
+
+sites_enabled:
+  - "vhost.conf"
+
+nginx_sites:
+  - "vhost.conf"
+################### NGINX CONF #####################
+
+nginx_user: "{% if ansible_os_family == 'RedHat' %}nginx{% elif ansible_os_family == 'Debian' %}www-data{% endif %}"
+#nginx_user: "nginx"
+nginx_group: "{{nginx_user}}"
+
+nginx_worker_processes: 4
+nginx_worker_connections: 768
+nginx_pid_file: "/run/nginx.pid"
+
+nginx_events_params:
+  - "# max clients ({{ nginx_worker_processes * nginx_worker_connections }} machines) = worker_processes * worker_connections"
+  - "worker_connections  {{ nginx_worker_connections }}"
+
+
+##################### VHOST CONF ##################
+# allow to generate a vhost if
+nginx_generate_vhost: False
+nginx_vhost_name: "vhost.conf"
+nginx_vhost:
+  server_name: "www.domain.com"
+  load_balancing: false # allow to set load balancing
+  upstream_name: "nginx_upstream"
+  upstream_servers:
+    - "127.0.0.1:8000"
+  ssl: false # allow to set ssh
+  ssl_certificate: ""
+  ssl_certificate_key: ""
+  server_extra:  [] # nginx extrat params
+    #- root: "/var/www/html"
+  locations: # nginx locations config
+    - path: "/"
+      params:
+        - try_files: "$uri $uri/ =404"
+
+

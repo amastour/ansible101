@@ -1,0 +1,13 @@
+---
+- hosts: web
+  become: yes
+  tasks:
+        - name: create html directory
+          file:
+                path: /var/www/html
+                state: directory
+                mode: 0755
+        - name: copy index.html
+          copy:
+                src: index.html
+                dest: /var/www/html/index.html

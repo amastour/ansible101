@@ -56,6 +56,6 @@ echo 3 > /proc/sys/vm/drop_caches
 if ! grep -qF "cd /home/vagrant/ansible" /home/vagrant/.bashrc ; then echo "cd /home/vagrant/ansible" >> /home/vagrant/.bashrc ; fi
 chown vagrant. /home/vagrant/.bashrc
 
-apt install python-pip -y
+apt install -y python-pip 
 
 pip install pymysql

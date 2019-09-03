@@ -1,0 +1,8 @@
+---
+
+- name: Nginx - Install the package Debian
+  apt:
+    name: "{{nginx_pkgs}}"
+    state: present
+    update_cache: yes
+  when: ansible_os_family == "Debian"

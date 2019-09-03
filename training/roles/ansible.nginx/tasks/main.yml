@@ -1,0 +1,18 @@
+---
+# tasks file for ansible.nginx
+
+- name: Nginx -  include vars
+  include_vars: "vars_{{ ansible_os_family }}.yml"
+
+- name: Nginx - call Install  Nginx
+  include_tasks: install.yml
+  tags:
+    - nginx
+    - install
+
+- name: Nginx - call configure  
+  include_tasks: configure.yml
+  tags:
+    - nginx
+    - configure
+

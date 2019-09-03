@@ -1,0 +1,26 @@
+---
+- hosts: web
+  become: yes
+  tasks:
+        - name: Install the Nginx HTTP Server on Debian dist
+          apt: 
+                name: nginx
+                update_cache: yes 
+                state: present             
+          when: ansible_os_family == "Debian"
+        - name: Install the Nginx HTTP Server on Debian dist
+          yum:
+                name: nginx
+                update_cache: yes
+                state: present
+          when: ansible_os_family == "Redhat"
+        - name: create html directory
+          file:
+                path: /var/www/html
+                state: directory
+                mode: 0755
+        
+        - name: copy index.html
+          copy:
+                src: files/index.html
+                dest: /var/www/html/index.html

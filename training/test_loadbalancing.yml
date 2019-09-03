@@ -1,0 +1,6 @@
+---
+
+- name: test apache
+  hosts: front 
+  roles:
+            - ansible.nginx

@@ -1,0 +1,9 @@
+---
+
+- name: Nginx - call configure  Nginx for Debian dists
+  include_tasks: configure_debian.yml
+  when: ansible_os_family == "Debian"
+
+- name: Nginx - call configure  Nginx for RedHat dists
+  include_tasks: configure_redhat.yml
+  when: ansible_os_family == "RedHat"

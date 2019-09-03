@@ -1,0 +1,29 @@
+---
+- hosts: front
+  become: yes
+  tasks:
+        - name: Install the Nginx HTTP Server on Debian dist
+          apt: 
+                name: nginx
+                update_cache: yes 
+                state: present             
+          when: ansible_os_family == "Debian"
+        - name: Install the Nginx HTTP Server on RedHat dist
+          yum:
+                name: nginx
+                update_cache: yes
+                state: present
+          when: ansible_os_family == "Redhat"
+        - name: create html directory
+          file:
+                path: /var/www/html
+                state: directory
+                mode: 0755
+        
+        - name: add  index.html
+          template:
+                src: index.html.j2
+                dest: /var/www/html/index.html
+        - debug:
+                msg: "{{ success_message }}"
+
