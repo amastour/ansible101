@@ -1,0 +1,2 @@
+- nginx_version: nginx=1.14.0-0ubuntu1.5
+- success_message: "Nginx version {{ nginx_version }} installed successfully"

@@ -79,6 +79,31 @@ Vagrant.configure("2") do |config|
 	  web.vm.provision "shell", inline: "cp /tmp/hosts /etc/hosts"
   end
 
+  config.vm.define "web3", autostart: false do |web|
+	  web.vm.box = "centos/7"
+	  web.vm.hostname = "web3"
+	  web.vm.network "private_network", ip: "192.168.33.103"
+	  web.vm.synced_folder ".", "/vagrant", id: "vagrant-root", disabled: true
+
+	  web.vm.provider "virtualbox" do |vb|
+		  # Do not load the command line GUI
+		  vb.gui = false
+
+		  # Virtual Machine Name
+		  vb.name = "web3"
+
+		  # Network settings
+		  vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+		  vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
+
+		  # Use VBoxManage to customize the VM
+		  vb.customize ["modifyvm", :id, "--memory", "1024"]
+	  
+	  end
+	  web.vm.provision "file", source: "hosts" , destination: "/tmp/hosts"
+	  web.vm.provision "shell", inline: "cp /tmp/hosts /etc/hosts"
+  end
+
   # Database Server Configuration
   config.vm.define "database", autostart: false do |database|
 	  database.vm.hostname = "database"

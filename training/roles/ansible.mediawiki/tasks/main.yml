@@ -81,7 +81,7 @@
   delegate_to: "{{item}}"
   # Check if we have mediawiki files on current host
   when: "hostvars[item].archive_uncompressed is defined"
-  with_items: "{{groups.apache}}"
+  with_items: "{{groups.web}}"
 
 - name: "remove default wiki webpath"
   become_user: "www-data"

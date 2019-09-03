@@ -1,0 +1,54 @@
+---
+
+- name: Nginx - Ensure configuration directorys exist
+  file:
+        path: "/{{ __nginx_conf_path }}/{{ item }}"
+        state: directory
+        mode: 0755
+        owner: "{{ __nginx_user }}"
+        group: "{{ __nginx_group }}"
+  with_items: "{{ __nginx_conf_dirs }}"
+
+- name: Nginx - Copy main configuration file
+  template:
+    src: "{{ __nginx_conf_path }}/nginx.conf.j2"
+    dest: "/{{ __nginx_conf_path }}/nginx.conf"
+    mode: "0755"
+    owner: "{{ __nginx_user }}"
+    group: "{{ __nginx_group }}"
+  notify: "reload nginx"
+
+- name:  Nginx - Template for conf.d
+  template:
+    src: "{{ item.src }}"
+    dest: "/{{ __nginx_conf_path }}/conf.d/{{ item.path  | regex_replace('.j2','') }}"
+    mode: "0755"
+    owner: "{{ __nginx_user }}"
+    group: "{{ __nginx_group }}"
+  with_filetree: "{{ __nginx_conf_path }}/conf.d/"
+  notify: "reload nginx"
+
+- name:  Nginx - Template for sites-available
+  template:
+    src: "{{ __nginx_conf_path }}/sites-available/{{ item }}.j2"
+    dest: "/{{ __nginx_conf_path }}/sites-available/{{ item }}"
+    mode: "0755"
+    owner: "{{ __nginx_user }}"
+    group: "{{ __nginx_group }}"
+  with_items: "{{ sites_enabled }}"
+  notify: "reload nginx"
+
+- name: Nginx - Create links for sites-enabled
+  file:
+    state: link
+    src: "/{{ __nginx_conf_path }}/sites-available/{{ item }}"
+    dest: "/{{ __nginx_conf_path }}/sites-enabled/{{ item }}"
+  with_items: "{{ nginx_sites }}"
+  notify:
+   - "reload nginx"
+
+- name: Nginx - add  index.html
+  template:
+        src: index.html.j2
+        dest: "{{ __sites_dir }}/index.html"
+

@@ -1,0 +1,22 @@
+---
+nginx_generate_vhost: True
+nginx_vhost_name: "vhost.conf"
+nginx_vhost:
+  server_name: "www.domain.com"
+  load_balancing: True # allow to set load balancing
+  upstream_name: "loadbalancing"
+  upstream_servers:
+    - "192.168.33.100"
+    - "192.168.33.101"
+  ssl: false # allow to set ssh
+  ssl_certificate: ""
+  ssl_certificate_key: ""
+  server_extra:  [] # nginx extrat params
+    #- root: "/var/www/html"
+  locations: # nginx locations config
+    - path: "/"
+      params:
+        - proxy_pass: "http://loadbalancing"
+        - proxy_redirect: "off"
+
+

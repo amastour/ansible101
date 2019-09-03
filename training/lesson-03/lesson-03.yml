@@ -1,9 +1,0 @@
----
-- hosts: web
-  become: yes
-  tasks:
-    - name: Install the Nginx HTTP Server
-      apt: 
-        name: nginx
-        update_cache: yes 
-        state: present

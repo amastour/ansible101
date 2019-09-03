@@ -1,0 +1,16 @@
+---
+- hosts: front
+  become: yes
+  vars_files:
+    - vars.yml
+  tasks:
+    - debug:
+            var: nginx_version
+    - name: Install the Nginx HTTP Server
+      apt: 
+        name: "{{ nginx_version }}"
+        update_cache: yes 
+        state: present
+
+    - debug:
+        msg: "{{ success_message }}"

@@ -1,0 +1,19 @@
+---
+__sites_dir: /var/www/html
+__nginx_conf_path : etc/nginx
+
+__nginx_conf_dirs:
+  - sites-enabled
+  - sites-available
+  - ssl
+  - conf.d
+
+__nginx_user: www-data
+__nginx_group: www-data
+
+__nginx_pkgs: nginx
+
+
+success_message: "{{ nginx_pkgs }} installed successfully"
+
+nginx_conf_dynamic_modules:  /etc/nginx/modules-enabled/*.conf

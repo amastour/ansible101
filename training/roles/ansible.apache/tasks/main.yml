@@ -1,0 +1,17 @@
+---
+# tasks file for ansible.apache2
+
+
+- name: Call install
+  import_tasks: install.yml
+  tags:
+    - role_apache2
+    - install
+
+
+- name: Call configure
+  import_tasks: configure.yml
+  tags:
+    - role_apache2
+    - configure
+
