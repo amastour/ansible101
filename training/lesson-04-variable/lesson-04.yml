@@ -2,7 +2,8 @@
 - hosts: front
   become: yes
   vars:
-    - nginx_version: nginx=1.14.0-0ubuntu1.5
+  # check sudo apt-cache madison nginx before lunch script
+    - nginx_version: nginx=1.14.0-0ubuntu1.6
     - success_message: "Nginx version {{ nginx_version }} installed successfully"
   tasks:
     - name: Install the Nginx HTTP Server
