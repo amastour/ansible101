@@ -1,6 +1,8 @@
 ---
 - hosts: front
   become: yes
+  vars_files:
+    - vars.yml
   tasks:
         - name: Install the Nginx HTTP Server on Debian dist
           apt: 
