@@ -1,5 +1,5 @@
 ---
-- hosts: web
+- hosts: front
   become: yes
   tasks:
         - name: create html directory
